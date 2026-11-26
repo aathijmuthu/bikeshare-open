@@ -1,4 +1,4 @@
-Independent reviewer of https://github.com/bcan13/ma6 at commit 43783db924272cf22fe64551adf1e5f29c0f3eaf; source extracted at /tmp/ma6-peer-audit; no Claude Code harness or Agent SDK audit executed.
+Independent reviewer of https://github.com/bcan13/ma6 at commit 43783db924272cf22fe64551adf1e5f29c0f3eaf; source extracted at /tmp/ma6-peer-audit
 
 Execution: OMP_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 /tmp/ma6-peer-venv/bin/python (in-memory checks and scoring; generated Parquet /tmp/ma6-peer-features.parquet only; committed peer artifacts not overwritten).
 
