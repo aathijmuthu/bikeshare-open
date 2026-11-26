@@ -61,3 +61,9 @@ ModuleNotFoundError: No module named 'claude_agent_sdk'
 
 The pinned SDK was not installed in the experiment environment; ordinary pip network access is blocked. Neither `claude` nor `ollama` was found on PATH. Core pinned pipeline packages were downloaded as wheels through permitted curl calls. That attempt generated no valid SDK result. The current reports/audit.jsonl records the subsequent independent agent review below; it is not output from this failed command.
 
+
+## Full installation and SDK retry
+
+A later fresh environment successfully installed the entire requirements file, including SDK 0.2.172. SDK imports and deterministic CSV/Parquet identity-tool calls now pass. The initial missing-SDK error above is historical. See [VERIFICATION.md](VERIFICATION.md) for full fresh-install and pipeline reproduction evidence.
+
+A model-driven retry used the local endpoint and a 25-second bound. It produced no completed batch result; the CLI emitted an unrecognized-model event and a workspace-trust warning before the timeout. The actual output is preserved in [SDK_RETRY.txt](SDK_RETRY.txt). The saved reports/audit.jsonl continues to represent the successful independent agent review, not this incomplete SDK attempt.

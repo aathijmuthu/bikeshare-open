@@ -1,0 +1,3 @@
+Ignoring 5 permissions.allow entries from .claude/settings.json: this workspace has not been trusted. Run Claude Code interactively here once and accept the trust dialog, or set projects["/private/tmp/bikeshare-full-install-source"].hasTrustDialogAccepted: true in /Users/amuthu/.claude.json.
+[claude-code:unrecognized_model] {"model":"bikeshare-coder","query_source":"sdk"}
+SDK_ATTEMPT_TIMEOUT: no completed batch result within 25 seconds; local model runtime is not available.
