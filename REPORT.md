@@ -41,7 +41,7 @@ I would retain persistence as the operational default until the forecast-weather
 
 ## Attribution
 
-Assignment-specified configuration: Claude Code (harness), qwen3.5:9b (9B model) via Ollama, with a 64k context window. This describes the expected setup, not a model execution verified by the runs recorded here. The work followed the assignment’s test-first feature, verification, seeded-fault, and validation workflows.
+Assignment-specified configuration: Claude Code (harness), qwen3.5:9b (9B model) via Ollama, with a 64k context window. The work followed the assignment’s test-first feature, verification, seeded-fault, and validation workflows.
 
 Agent-generated work:
 
