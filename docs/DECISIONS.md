@@ -13,3 +13,6 @@ Agents append here via the `/new-feature` skill; you append here by hand.
 - 2026-11-25: Update CLAUDE.md with volatility convention, seed-fault skill, and same-day weather availability caveat. Preserve starter constraints and both baselines.
 - 2026-11-25: Add explicit raw-column classifications and alias detection; unknown weather must raise. Add immutable raw SHA-256 validation to catch writes outside Edit/Write hooks.
 - 2026-11-25: Codex performed implementation and deterministic checks, not Claude Code/Ollama. Do not attribute these runs to an open-weight model or invent teammate audit evidence. Human methodological endorsement is pending.
+- 2026-11-25: Freeze before/after comparison before final test scoring; top-level metrics remain final untransformed models, before_feature preserves original features on the same rows. Regeneration is verification only.
+- 2026-11-25 (Codex proposal): Keep persistence as deployment default pending forecast-weather validation and a cost function. Final ridge test R² 0.6356 versus 0.5099 but MAE 840.3 versus 840.1 does not establish a daily absolute-error advantage; user judgment pending.
+- 2026-11-25: Pin already-required transitive pipeline dependencies to the verified environment; introduce no new modelling dependency.
