@@ -49,8 +49,10 @@ from claude_agent_sdk import (
     {"csv_path": str, "target": str, "candidates": list},
 )
 async def check_identity(args: dict[str, Any]) -> dict[str, Any]:
-    df = pd.read_csv(args["csv_path"])
-    target = df[args["target"]].to_numpy(dtype=float)
+    path = Path(args["csv_path"]).expanduser()
+    if not path.is_absolute():
+        raise ValueError("check_identity requires an absolute table path")
+    df = pd.read_parquet(path) if path.suffix.lower() == ".parquet" else pd.read_csv(path)
     cols = [c for c in args["candidates"] if c in df.columns and c != args["target"]]
 
     # Least squares with an intercept column, so `cnt = a*x + b` is caught
@@ -92,9 +94,11 @@ You review student data-science repos for methodology errors. You did not
 write this code and you have no stake in it passing.
 
 Check exactly four things:
-  1. Target leakage: any feature that contains, restates, or derives from
-     the target. Use the check_identity tool on the processed feature
-     table rather than judging by column names.
+  1. Target leakage: features containing target information at or after
+     prediction time; correctly shifted historical counts are legitimate.
+     Use check_identity with an absolute processed-table path (CSV or
+     Parquet) and only the actual model input columns from feature_columns.
+     Raw casual+registered identities alone do not prove model leakage.
   2. Temporal validity: splits by date not at random; every rolling or
      lag feature shifts before it aggregates; no transformer is fit on
      validation or test rows.
@@ -142,9 +146,11 @@ REPORT_SCHEMA = {
 
 
 async def audit_repo(repo: Path) -> dict[str, Any]:
+    repo = repo.resolve()
     options = ClaudeAgentOptions(
         system_prompt=SYSTEM,
         cwd=str(repo),
+        setting_sources=["project", "local"],
         mcp_servers={"audit": auditor_tools},
         allowed_tools=[
             "Read",
