@@ -253,3 +253,90 @@ python -m pytest tests/ -q
 
 ```
 Repair: one deterministic restoration in this Codex execution, zero Claude turns. Claude hook dispatch remains untested.
+
+## rolling
+
+Exact temporary diff:
+```diff
+diff --git a/src/features.py b/src/features.py
+index 8b5d5d8..0c4c017 100644
+--- a/src/features.py
++++ b/src/features.py
+@@ -73,7 +73,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
+     # If you add a longer lag, raise LAG_WARMUP in src/config.py.
+     out["cnt_lag_1"] = out[TARGET].shift(1)
+     out["cnt_lag_7"] = out[TARGET].shift(LAG_WARMUP)
+-    out["cnt_roll_7"] = out[TARGET].shift(1).rolling(LAG_WARMUP).mean()
++    out["cnt_roll_7"] = out[TARGET].rolling(LAG_WARMUP).mean()
+ 
+     out["cnt_std_7"] = out[TARGET].shift(1).rolling(LAG_WARMUP).std(ddof=0)
+ 
+
+```
+Full test output (exit 2):
+```text
+python -m pytest tests/ -q
+..........F.......                                                       [100%]
+=================================== FAILURES ===================================
+_______________________ test_rolling_mean_excludes_today _______________________
+
+feats =         dteday  instant  season  ...  cnt_lag_7   cnt_roll_7    cnt_std_7
+0   2011-01-10     10.0  WINTER  ...     134....428571   820.919420
+713 2012-12-31    731.0  WINTER  ...      920.0  1789.857143   821.327646
+
+[714 rows x 29 columns]
+
+    def test_rolling_mean_excludes_today(feats):
+        """cnt_roll_7 must be the mean of the 7 calendar days *before* today."""
+        by_date = feats.set_index("dteday")[TARGET]
+        date = feats.dteday.iloc[200]
+        window = [date - pd.Timedelta(days=k) for k in range(1, 8)]
+        if all(d in by_date.index for d in window):
+            expected = sum(by_date[d] for d in window) / 7
+>           assert feats.set_index("dteday").cnt_roll_7[date] == pytest.approx(expected)
+E           assert np.float64(4389.0) == 4414.857142857143 ± 0.00441486
+E             
+E             comparison failed
+E             Obtained: 4389.0
+E             Expected: 4414.857142857143 ± 0.00441486
+
+tests/test_leakage.py:57: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_leakage.py::test_rolling_mean_excludes_today - assert np.fl...
+1 failed, 17 passed in 0.90s
+make: *** [test] Error 1
+
+```
+Direct hook invocation stderr (exit 2):
+```text
+Leakage tests failed after editing /Users/amuthu/Desktop/DSC 180A/bikeshare-open-starter/src/features.py:
+[714 rows x 29 columns]
+
+    def test_rolling_mean_excludes_today(feats):
+        """cnt_roll_7 must be the mean of the 7 calendar days *before* today."""
+        by_date = feats.set_index("dteday")[TARGET]
+        date = feats.dteday.iloc[200]
+        window = [date - pd.Timedelta(days=k) for k in range(1, 8)]
+        if all(d in by_date.index for d in window):
+            expected = sum(by_date[d] for d in window) / 7
+>           assert feats.set_index("dteday").cnt_roll_7[date] == pytest.approx(expected)
+E           assert np.float64(4389.0) == 4414.857142857143 ± 0.00441486
+E             
+E             comparison failed
+E             Obtained: 4389.0
+E             Expected: 4414.857142857143 ± 0.00441486
+
+tests/test_leakage.py:57: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_leakage.py::test_rolling_mean_excludes_today - assert np.fl...
+1 failed, 8 passed in 0.24s
+
+```
+Restoration output (exit 0):
+```text
+python -m pytest tests/ -q
+..................                                                       [100%]
+18 passed in 0.82s
+
+```
+Repair: one deterministic restoration in this Codex execution, zero Claude turns. Claude hook dispatch remains untested.
