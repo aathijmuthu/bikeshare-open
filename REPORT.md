@@ -47,10 +47,10 @@ Agent-generated work:
 
 - The agent wrote the volatility feature, new tests, hash guard, validation experiment, before/after metric generation, seed-fault skill, evidence documents, and this draft report.
 - The agent ran the core pipeline, all tests, the three reversible source faults, direct hook invocations, and the Bash-copy bypass in a disposable copy. The agent preserved chronological commits using an external Git directory because workspace policy blocked `.git` creation.
-- The original pipeline, reviewer, hook wiring, new-feature skill, and SDK auditor came from the starter. No independent Claude reviewer was run. The SDK attempt failed on missing `claude_agent_sdk`; `docs/AUDIT.md` records its actual output. The required `reports/audit.jsonl` is still pending.
+- The original pipeline, reviewer, hook wiring, new-feature skill, and SDK auditor came from the starter. A fresh independent reviewer audited the teammate repository using the starter checklist; its output and evidence are in `docs/AUDIT.md`. The SDK attempt failed on missing `claude_agent_sdk`; `docs/AUDIT.md` records its actual output. The required `reports/audit.jsonl` is still pending.
 
 Human decisions and remaining work:
 
 - After reviewing the report and decision log, the user accepted retaining the volatility feature, the conditional validity of the residual-target transformation, and the recommendation to keep persistence as the deployment default pending forecast-weather validation.
 - Target, forbidden columns, split, and baselines were provided by the assignment/starter. The agent proposed the feature, transformation, and deployment interpretation; the user reviewed and endorsed those conclusions afterward, as recorded in `docs/DECISIONS.md`.
-- The repository is published at https://github.com/aathijmuthu/bikeshare-open. The teammate audit and successful SDK audit remain pending; after completing and committing that evidence, submit the repository URL through the course form.
+- The repository is published at https://github.com/aathijmuthu/bikeshare-open. The teammate audit evidence is recorded in `docs/AUDIT.md`; the student’s verdict review and a successful own-repository SDK audit remain pending. After completing and committing that evidence, submit the repository URL through the course form.

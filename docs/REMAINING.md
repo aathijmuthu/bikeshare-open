@@ -1,25 +1,11 @@
 # Remaining steps before submission
 
-The core implementation and report draft are complete; required audit evidence and human decisions are pending.
+The repository is public at https://github.com/aathijmuthu/bikeshare-open. The report and methodological decisions were reviewed and accepted by the user. The peer review is complete and recorded at docs/AUDIT.md with exact output and evidence.
 
-1. The report uses the assignment’s workflow terminology.
-2. Supply your teammate's repository URL. Run the `.claude/agents/leakage-auditor.md` reviewer in a fresh Claude Code context against that repo, paste its output verbatim into docs/AUDIT.md, then write your own verdict about findings that change a number.
-3. Install requirements, configure Ollama/Claude Code using README.md, run `make check-model`, then `python agent/audit.py . --out reports/audit.jsonl`. Check that this is a successful schema-compliant audit, address/explain findings, and commit the real output. The recorded attempt currently fails because the SDK is missing; neither model runtime is installed.
-4. The hook script was tested by direct invocation. Reproduce Edit/Write hook dispatch in Claude Code and record actual repair turns if the instructor requires the specified harness evidence. The Bash-copy experiment used a disposable copy to preserve the submission's immutable CSV.
-5. Read REPORT.md and docs/DECISIONS.md. Endorse or revise feature retention, transformation availability, the forecast-weather caveat, and the ridge/persistence deployment argument. Replace pending attribution with only decisions you actually make. Supply your name if desired. Do not claim agent proposals as prior personal decisions.
-6. The workspace forbids creating `.git`, so the full required commit sequence is in `bikeshare-assignment.bundle`. Recover a normal repo in a new directory from your own terminal:
+1. Review the draft peer-audit verdict in docs/AUDIT.md and endorse or revise it as your own assessment. The independent agent used the starter reviewer checklist; it did not run the Claude Code slash command.
+2. Complete the own-repository SDK audit. Install requirements, configure the local runtime using README.md, run `make check-model`, then `python agent/audit.py . --out reports/audit.jsonl`. Inspect the real schema-compliant output, fix or explain any findings, and commit the output. The recorded attempt failed because the SDK was missing; reports/audit.jsonl remains absent.
+3. The source-fault hook script was tested by direct invocation. Automatic Edit/Write hook dispatch and interactive repair turns were not measured. Reproduce that evidence in the requested harness if required. The Bash-copy test used a disposable copy to preserve the raw CSV.
+4. The normal Git checkout is /tmp/bikeshare-open-submission. Push its new commits from your regular terminal: `git -C /tmp/bikeshare-open-submission push origin main`. The source workspace cannot use the stored SSH key. Its copy of the preserved history is also saved in bikeshare-assignment.bundle; do not squash the history.
+5. After completing the remaining audit evidence, run `make all` and `make test`, check the report table against metrics.json, commit/push the final evidence, and submit the public repository URL through the course form. Submission has not been performed.
 
-   ```sh
-   git clone /absolute/path/to/bikeshare-open-starter/bikeshare-assignment.bundle bikeshare-open
-   cd bikeshare-open
-   python3.12 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   make all
-   make test
-   ```
-
-   The first commit is the unmodified starter; do not squash the history. Do remaining work in this recovered repository and commit audit evidence and your revisions. The original starter folder contains the same final files but no local `.git` directory.
-7. Create a GitHub repository, push the recovered history, verify access for graders, and submit its URL through the course form. No repository has been published or submitted by the agent.
-
-See docs/AUDIT.md for real failure output. reports/audit.jsonl is absent deliberately; it is a required unfinished deliverable.
+Keep a durable clone outside /tmp for subsequent work; /tmp is temporary. The workspace still contains the final files and a Git bundle with the full history.

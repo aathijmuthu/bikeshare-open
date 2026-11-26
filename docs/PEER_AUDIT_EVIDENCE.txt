@@ -1,0 +1,180 @@
+Independent reviewer of https://github.com/bcan13/ma6 at commit 43783db924272cf22fe64551adf1e5f29c0f3eaf; source extracted at /tmp/ma6-peer-audit; no Claude Code harness or Agent SDK audit executed.
+
+Execution: OMP_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 /tmp/ma6-peer-venv/bin/python (in-memory checks and scoring; generated Parquet /tmp/ma6-peer-features.parquet only; committed peer artifacts not overwritten).
+
+{
+  "python": "3.12.15",
+  "numpy": "1.26.4",
+  "pandas": "2.2.2",
+  "sklearn": "1.5.0",
+  "scipy": "1.14.0",
+  "pyarrow": "22.0.0",
+  "pytest": "9.1.1"
+}
+
+{
+  "raw_rows": 728,
+  "feature_rows": 714,
+  "lost_rows": 14,
+  "allowed_loss": 14,
+  "missing_calendar_days": [
+    "2011-03-10"
+  ],
+  "split_sizes": [
+    348,
+    182,
+    184
+  ],
+  "features": [
+    "temp",
+    "atemp",
+    "hum",
+    "windspeed",
+    "dayofweek",
+    "is_weekend",
+    "is_holiday",
+    "is_workday",
+    "month_sin",
+    "month_cos",
+    "weather_severity",
+    "cnt_lag_1",
+    "cnt_lag_7",
+    "cnt_roll_7",
+    "cnt_roll_3"
+  ],
+  "structural_checks": "PASS: forbidden exclusion, casual+registered identity, every retained lag and shifted rolling mean, target perturbation, scaler training means, no exact target identity among feature subsets of sizes 1\u20133, bounded row loss; source confirms date split and train-only fits"
+}
+
+{
+  "metrics_json_exact_dictionary_equality": true,
+  "target_change_json_exact_dictionary_equality": true,
+  "metrics": {
+    "n_features": 15,
+    "features": [
+      "temp",
+      "atemp",
+      "hum",
+      "windspeed",
+      "dayofweek",
+      "is_weekend",
+      "is_holiday",
+      "is_workday",
+      "month_sin",
+      "month_cos",
+      "weather_severity",
+      "cnt_lag_1",
+      "cnt_lag_7",
+      "cnt_roll_7",
+      "cnt_roll_3"
+    ],
+    "n_train": 348,
+    "n_valid": 182,
+    "n_test": 184,
+    "baseline_mean": {
+      "valid": {
+        "r2": -0.9318,
+        "mae": 2002.2
+      },
+      "test": {
+        "r2": -2.1441,
+        "mae": 2847.7
+      }
+    },
+    "baseline_persistence": {
+      "valid": {
+        "r2": 0.4507,
+        "mae": 900.6
+      },
+      "test": {
+        "r2": 0.5099,
+        "mae": 840.1
+      }
+    },
+    "ridge": {
+      "valid": {
+        "r2": 0.6439,
+        "mae": 836.5
+      },
+      "test": {
+        "r2": 0.58,
+        "mae": 946.2
+      }
+    },
+    "hgb": {
+      "valid": {
+        "r2": 0.2564,
+        "mae": 1263.8
+      },
+      "test": {
+        "r2": -0.4341,
+        "mae": 1927.1
+      }
+    },
+    "before_feature": {
+      "baseline_mean": {
+        "valid": {
+          "r2": -0.9318,
+          "mae": 2002.2
+        },
+        "test": {
+          "r2": -2.1441,
+          "mae": 2847.7
+        }
+      },
+      "baseline_persistence": {
+        "valid": {
+          "r2": 0.4507,
+          "mae": 900.6
+        },
+        "test": {
+          "r2": 0.5099,
+          "mae": 840.1
+        }
+      },
+      "ridge": {
+        "valid": {
+          "r2": 0.6475,
+          "mae": 832.9
+        },
+        "test": {
+          "r2": 0.5833,
+          "mae": 947.1
+        }
+      },
+      "hgb": {
+        "valid": {
+          "r2": 0.2368,
+          "mae": 1290.8
+        },
+        "test": {
+          "r2": -0.4766,
+          "mae": 1961.9
+        }
+      }
+    }
+  },
+  "target_change": {
+    "transformation": "cnt - cnt_lag_1",
+    "hgb_change": {
+      "valid": {
+        "r2": 0.6254,
+        "mae": 795.3
+      },
+      "test": {
+        "r2": 0.5714,
+        "mae": 876.0
+      }
+    }
+  }
+}
+
+All model score comparisons checked in REPORT.md; mean and persistence are both reported for original/final features, and transformed boosting is explicitly compared against persistence. Limits: observed same-day weather assumed available, and REPORT.md acknowledges earlier test-set access; no deployment forecast-weather performance established; no Claude Code harness or Agent SDK execution claimed.
+
+Command: OMP_NUM_THREADS=1 PYTHONDONTWRITEBYTECODE=1 /tmp/ma6-peer-venv/bin/python -m pytest -q -p no:cacheprovider
+Working directory: /tmp/ma6-peer-audit
+Result: 17 passed in 0.81s, exit code 0.
+
+Non-fatal runtime stderr: pyarrow CPU-cache/NEON sysctl queries were denied by sandbox; both Parquet read/write and metric dictionary equality assertions completed with exit code 0.
+
+Final reviewer output, verbatim:
+Independent review of bcan13/ma6 at 43783db924272cf22fe64551adf1e5f29c0f3eaf: all five leakage-auditor checks pass under the report’s stated daily-forecast and observed-weather assumptions, with no finding that changes numbers or invalidates its qualified conclusions; pinned numerical dependencies reproduce both committed score files exactly and all 17 tests pass, while prior test access remains an acknowledged limitation and this review does not constitute Claude Code harness or Agent SDK execution.
