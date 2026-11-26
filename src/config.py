@@ -53,3 +53,8 @@ VALID_END = "2012-06-30"
 # have no complete history and are dropped; tests/test_contract.py uses this
 # to bound how many rows may legitimately disappear.
 LAG_WARMUP = 7
+
+# Explicit raw-data schema: new columns need a deliberate classification.
+RAW_FEATURE_COLS = {'temp', 'atemp', 'hum', 'windspeed'}
+RAW_CONTEXT_COLS = {'season', 'mnth', 'holiday', 'weekday', 'workday', 'weather'}
+RAW_SHA256 = 'a6bed1577f6e4de56dcfae6d8315985073cc0ad3446c8c99ed60c86a0b5ad9dc'

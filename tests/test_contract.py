@@ -56,3 +56,21 @@ def test_persistence_baseline_is_reported():
     """The baseline that matters for a lag-driven model is 'yesterday again'.
     It must be in the comparison, whatever its score."""
     assert "baseline_persistence" in MODELS
+
+
+def test_all_raw_columns_are_classified(raw):
+    from src.config import FORBIDDEN, RAW_FEATURE_COLS, RAW_CONTEXT_COLS
+    classified = FORBIDDEN | RAW_FEATURE_COLS | RAW_CONTEXT_COLS | {'dteday'}
+    assert set(raw.columns) == classified, f'unclassified raw columns: {set(raw.columns) - classified}'
+
+
+def test_no_raw_target_alias(raw):
+    """Renaming a forbidden count does not make it a valid predictor."""
+    import numpy as np
+    from src.config import FORBIDDEN
+    for column in raw.select_dtypes(include='number'):
+        if column in FORBIDDEN:
+            continue
+        values = raw[column].to_numpy(dtype=float)
+        for forbidden in ('cnt', 'casual', 'registered'):
+            assert not np.allclose(values, raw[forbidden]), f'{column} aliases {forbidden}'
