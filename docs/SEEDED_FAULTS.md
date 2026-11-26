@@ -170,3 +170,86 @@ FAILED tests/test_leakage.py::test_rolling_std_uses_previous_seven_calendar_days
 make: *** [test] Error 1
 
 ```
+
+## forbidden
+
+Exact temporary diff:
+```diff
+diff --git a/src/features.py b/src/features.py
+index 8b5d5d8..66d645e 100644
+--- a/src/features.py
++++ b/src/features.py
+@@ -83,7 +83,7 @@ def build_features(df: pd.DataFrame) -> pd.DataFrame:
+ def feature_columns(df: pd.DataFrame) -> list[str]:
+     """Numeric columns that are safe to feed the model."""
+     numeric = df.select_dtypes(include="number").columns
+-    return [c for c in numeric if c not in FORBIDDEN]
++    return [c for c in numeric if c not in FORBIDDEN or c == "registered"]
+ 
+ 
+ if __name__ == "__main__":
+
+```
+Full test output (exit 2):
+```text
+python -m pytest tests/ -q
+.......F..........                                                       [100%]
+=================================== FAILURES ===================================
+__________________________ test_no_forbidden_features __________________________
+
+feats =         dteday  instant  season  ...  cnt_lag_7   cnt_roll_7    cnt_std_7
+0   2011-01-10     10.0  WINTER  ...     134....142857   820.919420
+713 2012-12-31    731.0  WINTER  ...      920.0  1531.428571   821.327646
+
+[714 rows x 29 columns]
+
+    def test_no_forbidden_features(feats):
+        """Guards the gate, not the data: feature_columns() excludes FORBIDDEN by
+        construction, so this cannot discover a *new* leaky column. What it
+        catches is someone editing feature_columns() or FORBIDDEN -- which is
+        exactly the fault the Step 7 hook demonstrates."""
+        cols = set(feature_columns(feats))
+>       assert not (cols & FORBIDDEN), f"forbidden columns in feature set: {cols & FORBIDDEN}"
+E       AssertionError: forbidden columns in feature set: {'registered'}
+E       assert not ({'atemp', 'cnt_lag_1', 'cnt_lag_7', 'cnt_roll_7', 'cnt_std_7', 'dayofweek', ...} & {'casual', 'cnt', 'cnt_2d_bfr', 'days_since_2011', 'instant', 'registered', ...})
+
+tests/test_leakage.py:31: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_leakage.py::test_no_forbidden_features - AssertionError: fo...
+1 failed, 17 passed in 1.23s
+make: *** [test] Error 1
+
+```
+Direct hook invocation stderr (exit 2):
+```text
+Leakage tests failed after editing /Users/amuthu/Desktop/DSC 180A/bikeshare-open-starter/src/features.py:
+feats =         dteday  instant  season  ...  cnt_lag_7   cnt_roll_7    cnt_std_7
+0   2011-01-10     10.0  WINTER  ...     134....142857   820.919420
+713 2012-12-31    731.0  WINTER  ...      920.0  1531.428571   821.327646
+
+[714 rows x 29 columns]
+
+    def test_no_forbidden_features(feats):
+        """Guards the gate, not the data: feature_columns() excludes FORBIDDEN by
+        construction, so this cannot discover a *new* leaky column. What it
+        catches is someone editing feature_columns() or FORBIDDEN -- which is
+        exactly the fault the Step 7 hook demonstrates."""
+        cols = set(feature_columns(feats))
+>       assert not (cols & FORBIDDEN), f"forbidden columns in feature set: {cols & FORBIDDEN}"
+E       AssertionError: forbidden columns in feature set: {'registered'}
+E       assert not ({'atemp', 'cnt_lag_1', 'cnt_lag_7', 'cnt_roll_7', 'cnt_std_7', 'dayofweek', ...} & {'casual', 'cnt', 'cnt_2d_bfr', 'days_since_2011', 'instant', 'registered', ...})
+
+tests/test_leakage.py:31: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_leakage.py::test_no_forbidden_features - AssertionError: fo...
+1 failed, 8 passed in 0.23s
+
+```
+Restoration output (exit 0):
+```text
+python -m pytest tests/ -q
+..................                                                       [100%]
+18 passed in 0.80s
+
+```
+Repair: one deterministic restoration in this Codex execution, zero Claude turns. Claude hook dispatch remains untested.
