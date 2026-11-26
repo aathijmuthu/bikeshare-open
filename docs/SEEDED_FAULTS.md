@@ -340,3 +340,70 @@ python -m pytest tests/ -q
 
 ```
 Repair: one deterministic restoration in this Codex execution, zero Claude turns. Claude hook dispatch remains untested.
+
+## weather
+
+Exact temporary diff:
+```diff
+diff --git a/src/features.py b/src/features.py
+index 8b5d5d8..03f6e5c 100644
+--- a/src/features.py
++++ b/src/features.py
+@@ -27,7 +27,7 @@ def encode_weather(series: pd.Series) -> pd.Series:
+     known = series.dropna()
+     unknown = set(known.unique()) - set(WEATHER_ORDER)
+     if unknown:
+-        raise ValueError(f"unmapped weather labels: {sorted(unknown)}")
++        pass # seeded fault: silently map unknown weather to NaN
+     return series.map(WEATHER_ORDER).astype(float)
+ 
+ 
+
+```
+Full test output (exit 2):
+```text
+python -m pytest tests/ -q
+..............F...                                                       [100%]
+=================================== FAILURES ===================================
+_______________________ test_unknown_weather_is_rejected _______________________
+
+    def test_unknown_weather_is_rejected():
+        from src.features import encode_weather
+>       with pytest.raises(ValueError, match='unmapped weather'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_leakage.py:82: Failed
+=========================== short test summary info ============================
+FAILED tests/test_leakage.py::test_unknown_weather_is_rejected - Failed: DID ...
+1 failed, 17 passed in 0.91s
+make: *** [test] Error 1
+
+```
+Direct hook invocation stderr (exit 2):
+```text
+Leakage tests failed after editing /Users/amuthu/Desktop/DSC 180A/bikeshare-open-starter/src/features.py:
+........F                                                                [100%]
+=================================== FAILURES ===================================
+_______________________ test_unknown_weather_is_rejected _______________________
+
+    def test_unknown_weather_is_rejected():
+        from src.features import encode_weather
+>       with pytest.raises(ValueError, match='unmapped weather'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_leakage.py:82: Failed
+=========================== short test summary info ============================
+FAILED tests/test_leakage.py::test_unknown_weather_is_rejected - Failed: DID ...
+1 failed, 8 passed in 0.24s
+
+```
+Restoration output (exit 0):
+```text
+python -m pytest tests/ -q
+..................                                                       [100%]
+18 passed in 0.80s
+
+```
+Repair: one deterministic restoration in this Codex execution, zero Claude turns. Claude hook dispatch remains untested.
