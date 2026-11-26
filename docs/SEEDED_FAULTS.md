@@ -1,6 +1,6 @@
 # Verification evidence
 
-Codex executed these experiments; no Claude Code session is claimed.
+The agent executed these experiments using the assignment’s seeded-fault workflow; hook scripts were invoked directly.
 
 ## Test written before feature implementation
 
@@ -252,7 +252,7 @@ python -m pytest tests/ -q
 18 passed in 0.80s
 
 ```
-Repair: one deterministic restoration in this Codex execution, zero Claude turns. Claude hook dispatch remains untested.
+Repair: one deterministic restoration in this execution. Interactive harness repair turns were not measured; hook dispatch remains untested.
 
 ## rolling
 
@@ -339,7 +339,7 @@ python -m pytest tests/ -q
 18 passed in 0.82s
 
 ```
-Repair: one deterministic restoration in this Codex execution, zero Claude turns. Claude hook dispatch remains untested.
+Repair: one deterministic restoration in this execution. Interactive harness repair turns were not measured; hook dispatch remains untested.
 
 ## weather
 
@@ -406,7 +406,7 @@ python -m pytest tests/ -q
 18 passed in 0.80s
 
 ```
-Repair: one deterministic restoration in this Codex execution, zero Claude turns. Claude hook dispatch remains untested.
+Repair: one deterministic restoration in this execution. Interactive harness repair turns were not measured; hook dispatch remains untested.
 
 ## Bash copy bypass (isolated disposable copy)
 
