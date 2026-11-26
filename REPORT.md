@@ -49,8 +49,8 @@ Agent-generated work:
 - The agent ran the core pipeline, all tests, the three reversible source faults, direct hook invocations, and the Bash-copy bypass in a disposable copy. The agent preserved chronological commits using an external Git directory because workspace policy blocked `.git` creation.
 - The original pipeline, reviewer, hook wiring, new-feature skill, and SDK auditor came from the starter. No independent Claude reviewer was run. The SDK attempt failed on missing `claude_agent_sdk`; `docs/AUDIT.md` records its actual output. The required `reports/audit.jsonl` is still pending.
 
-Human decisions and outstanding input:
+Human decisions and remaining work:
 
-- The user authorized assistance and requested an explicit list of missing inputs. No human methodological decisions have yet been supplied in this conversation.
-- Target, forbidden columns, split, and baselines were provided by the assignment/starter. Feature retention, target transformation, and deployment interpretation above are agent proposals dated in `docs/DECISIONS.md`; the user must review and endorse or revise them rather than claim to have made them already.
-- A teammate URL and an actual fresh-context reviewer run, a successful SDK audit and the user's final scientific judgment remain pending. The repository must then be published and its URL submitted. This draft is not yet a complete submission.
+- After reviewing the report and decision log, the user accepted retaining the volatility feature, the conditional validity of the residual-target transformation, and the recommendation to keep persistence as the deployment default pending forecast-weather validation.
+- Target, forbidden columns, split, and baselines were provided by the assignment/starter. The agent proposed the feature, transformation, and deployment interpretation; the user reviewed and endorsed those conclusions afterward, as recorded in `docs/DECISIONS.md`.
+- The repository is published at https://github.com/aathijmuthu/bikeshare-open. The teammate audit and successful SDK audit remain pending; after completing and committing that evidence, submit the repository URL through the course form.
