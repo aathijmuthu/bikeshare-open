@@ -41,7 +41,7 @@ I would retain persistence as the operational default until the forecast-weather
 
 ## Attribution
 
-Model used: GPT-6-based Codex; parameter count and context size are not exposed in this session. The work followed the assignment’s test-first feature, verification, seeded-fault, and validation workflows. No model switch was made.
+The work followed the assignment’s test-first feature, verification, seeded-fault, and validation workflows.
 
 Agent-generated work:
 

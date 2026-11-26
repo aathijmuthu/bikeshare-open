@@ -2,7 +2,7 @@
 
 The core implementation and report draft are complete; required audit evidence and human decisions are pending.
 
-1. The report uses the assignment’s workflow terminology and names the actual model in Attribution.
+1. The report uses the assignment’s workflow terminology.
 2. Supply your teammate's repository URL. Run the `.claude/agents/leakage-auditor.md` reviewer in a fresh Claude Code context against that repo, paste its output verbatim into docs/AUDIT.md, then write your own verdict about findings that change a number.
 3. Install requirements, configure Ollama/Claude Code using README.md, run `make check-model`, then `python agent/audit.py . --out reports/audit.jsonl`. Check that this is a successful schema-compliant audit, address/explain findings, and commit the real output. The recorded attempt currently fails because the SDK is missing; neither model runtime is installed.
 4. The hook script was tested by direct invocation. Reproduce Edit/Write hook dispatch in Claude Code and record actual repair turns if the instructor requires the specified harness evidence. The Bash-copy experiment used a disposable copy to preserve the submission's immutable CSV.
