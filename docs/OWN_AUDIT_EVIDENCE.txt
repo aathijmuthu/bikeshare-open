@@ -1,0 +1,293 @@
+REVIEW EXECUTION: independent agent review; not Claude Agent SDK batch execution
+Source commit: d5af212023431bf5e906499f4f7b25de8381802c
+Fresh disposable source copy: /var/folders/gz/6kb8kdpj15v5wds8xxrn24rm0000gn/T/bikeshare-own-reproduction-r8h_dtjp
+Interpreter: /Users/amuthu/Desktop/DSC 180A/bikeshare-open-starter/.venv/bin/python 3.12.15 (main, Sep 30 2026, 22:04:19) [Clang 21.0.0 (clang-2100.3.34.2)]
+OMP_NUM_THREADS: 1
+numpy 2.5.3
+pandas 3.0.5
+pyarrow 26.0.1
+scikit-learn 1.9.1
+pytest 9.1.1
+scipy 1.18.1
+joblib 1.6.0
+threadpoolctl 3.8.0
+narwhals 2.29.0
+cloudpickle 3.1.3
+python-dateutil 4.0.0
+tzdata 2026.6
+iniconfig 2.3.1
+packaging 26.4
+pluggy 1.7.0
+pygments 2.21.0
+claude-agent-sdk NOT INSTALLED
+COMMAND: make all
+python -m src.ingest
+OK ingest: 728 rows, 2011-01-03 -> 2012-12-31
+python -m src.features
+OK features: 714 rows, 15 features -> features.parquet
+  temp, atemp, hum, windspeed, dayofweek, is_weekend, is_holiday, is_workday, month_sin, month_cos, weather_severity, cnt_lag_1, cnt_lag_7, cnt_roll_7, cnt_std_7
+python -m src.train
+{
+  "n_features": 15,
+  "n_train": 348,
+  "n_valid": 182,
+  "n_test": 184,
+  "baseline_mean": {
+    "valid": {
+      "r2": -0.9318,
+      "mae": 2002.2
+    },
+    "test": {
+      "r2": -2.1441,
+      "mae": 2847.7
+    }
+  },
+  "baseline_persistence": {
+    "valid": {
+      "r2": 0.4507,
+      "mae": 900.6
+    },
+    "test": {
+      "r2": 0.5099,
+      "mae": 840.1
+    }
+  },
+  "ridge": {
+    "valid": {
+      "r2": 0.7224,
+      "mae": 700.4
+    },
+    "test": {
+      "r2": 0.6356,
+      "mae": 840.3
+    }
+  },
+  "hgb": {
+    "valid": {
+      "r2": 0.0977,
+      "mae": 1381.6
+    },
+    "test": {
+      "r2": -0.6959,
+      "mae": 2108.4
+    }
+  },
+  "before_feature": {
+    "baseline_mean": {
+      "valid": {
+        "r2": -0.9318,
+        "mae": 2002.2
+      },
+      "test": {
+        "r2": -2.1441,
+        "mae": 2847.7
+      }
+    },
+    "baseline_persistence": {
+      "valid": {
+        "r2": 0.4507,
+        "mae": 900.6
+      },
+      "test": {
+        "r2": 0.5099,
+        "mae": 840.1
+      }
+    },
+    "ridge": {
+      "valid": {
+        "r2": 0.6475,
+        "mae": 832.9
+      },
+      "test": {
+        "r2": 0.5833,
+        "mae": 947.1
+      }
+    },
+    "hgb": {
+      "valid": {
+        "r2": 0.2185,
+        "mae": 1296.6
+      },
+      "test": {
+        "r2": -0.4975,
+        "mae": 1972.6
+      }
+    }
+  }
+}
+
+EXIT: 0
+COMMAND: /Users/amuthu/Desktop/DSC 180A/bikeshare-open-starter/.venv/bin/python -m pytest tests/ -q
+...................                                                      [100%]
+19 passed in 0.80s
+
+EXIT: 0
+COMMAND: /Users/amuthu/Desktop/DSC 180A/bikeshare-open-starter/.venv/bin/python -m src.experiments
+{
+  "before": {
+    "baseline_mean": {
+      "r2": -0.9318,
+      "mae": 2002.2
+    },
+    "baseline_persistence": {
+      "r2": 0.4507,
+      "mae": 900.6
+    },
+    "ridge": {
+      "r2": 0.6475,
+      "mae": 832.9
+    },
+    "hgb": {
+      "r2": 0.2185,
+      "mae": 1296.6
+    }
+  },
+  "after": {
+    "baseline_mean": {
+      "r2": -0.9318,
+      "mae": 2002.2
+    },
+    "baseline_persistence": {
+      "r2": 0.4507,
+      "mae": 900.6
+    },
+    "ridge": {
+      "r2": 0.7224,
+      "mae": 700.4
+    },
+    "hgb": {
+      "r2": 0.0977,
+      "mae": 1381.6
+    }
+  },
+  "residual_hgb_valid": {
+    "r2": 0.5642,
+    "mae": 885.8
+  }
+}
+
+EXIT: 0
+COMMAND: /Users/amuthu/Desktop/DSC 180A/bikeshare-open-starter/.venv/bin/python -m pip check
+WARNING: The directory '/Users/amuthu/Library/Caches/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+No broken requirements found.
+
+EXIT: 0
+EXACT DICTIONARY EQUALITY: metrics.json
+EXACT DICTIONARY EQUALITY: validation_experiments.json
+Actual model inputs: ["temp", "atemp", "hum", "windspeed", "dayofweek", "is_weekend", "is_holiday", "is_workday", "month_sin", "month_cos", "weather_severity", "cnt_lag_1", "cnt_lag_7", "cnt_roll_7", "cnt_std_7"]
+Actual-feature exact affine identity check subsets sizes 1-3: 575 subsets; hits: []
+Lag/std alignment checked all 714 retained rows against raw actual calendar dates; maximum absolute errors: {'cnt_lag_1': 0.0, 'cnt_lag_7': 0.0, 'cnt_roll_7': 0.0, 'cnt_std_7': np.float64(9.902123565552756e-11)}
+Future/current-target perturbation: all actual model features on or before each of 8 cutoffs unchanged exactly, including gaps/split boundaries.
+Raw rows: 728 calendar rows: 729 missing days: ['2011-03-10'] retained: 714 exact raw-row losses: 14
+Excluded actual dates: ['2011-01-03', '2011-01-04', '2011-01-05', '2011-01-06', '2011-01-07', '2011-01-08', '2011-01-09', '2011-03-11', '2011-03-12', '2011-03-13', '2011-03-14', '2011-03-15', '2011-03-16', '2011-03-17']
+Split train 348 2011-01-10 00:00:00 2011-12-31 00:00:00
+Split valid 182 2012-01-01 00:00:00 2012-06-30 00:00:00
+Split test 184 2012-07-01 00:00:00 2012-12-31 00:00:00
+Scaler n_samples_seen_ and means/variances equal training-only rows: 348.0
+Both baselines verified: training-only constant mean; exact prior-calendar-day count persistence.
+REPORT Results table numerical consistency: all 8 rows / 32 score cells match reproduced metrics.
+Raw SHA-256 verified: a6bed1577f6e4de56dcfae6d8315985073cc0ad3446c8c99ed60c86a0b5ad9dc
+Original source git status after audit: 
+LIMITATIONS: Fresh source reproduction used existing installed pinned numerical/test environment; no fresh network/full requirements installation. claude-agent-sdk absent, no SDK/Claude/Ollama execution. Same-day observed weather is retrospective and report expressly qualifies it; rolling one-day observed-yesterday protocol, not fixed-origin multi-step evaluation. Existing automated contract test accesses test rows; report discloses this. Tests verify current data; bounded drop accounting is enforced by test, not runtime build assertion. No new material finding invalidates qualified conclusions.
+
+VERBATIM REVIEWER VERDICT
+Independent review of bikeshare-open at d5af212023431bf5e906499f4f7b25de8381802c: all five leakage-auditor checks pass under the report’s explicitly stated observed-weather and rolling one-day assumptions, with no material finding that changes a number or invalidates its qualified conclusions; fresh source reproduction with the installed pinned core environment reproduces both committed metric files exactly and all 19 tests pass. This is an independent agent review, not Claude Agent SDK batch execution or a fresh installation of the full requirements file; the SDK remains absent.
+
+REVIEW SPECIFICATIONS
+Read src/config.py, .claude/agents/leakage-auditor.md, agent/audit.py SYSTEM/REPORT_SCHEMA, actual modelling source, all tests, REPORT.md, requirements.txt and recorded results. Reviewed target identity, temporal validity, calendar gaps, bounded row accounting, both baselines and reproducibility. No tracked source or artifacts were modified. Generated files exist only in disposable temporary copy.
+
+INDEPENDENT CHECK EXECUTION COMMAND
+OMP_NUM_THREADS=1 /Users/amuthu/Desktop/DSC\ 180A/bikeshare-open-starter/.venv/bin/python /tmp/bikeshare-own-audit-check.py > /tmp/bikeshare-own-audit-evidence.txt 2>&1
+
+EXACT CHECK SCRIPT
+import os,sys,json,subprocess,shutil,tempfile,hashlib,importlib.metadata,itertools
+from pathlib import Path
+source=Path('/tmp/bikeshare-open-submission')
+run=Path(tempfile.mkdtemp(prefix='bikeshare-own-reproduction-'))
+shutil.copytree(source,run,dirs_exist_ok=True,ignore=shutil.ignore_patterns('.git','__pycache__','.pytest_cache'))
+shutil.rmtree(run/'data/processed',ignore_errors=True)
+os.chdir(run)
+sys.path.insert(0,str(run))
+print('REVIEW EXECUTION: independent agent review; not Claude Agent SDK batch execution',flush=True)
+print('Source commit:',subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip(),flush=True)
+print('Fresh disposable source copy:',run,flush=True)
+print('Interpreter:',sys.executable,sys.version,flush=True)
+print('OMP_NUM_THREADS:',os.getenv('OMP_NUM_THREADS'),flush=True)
+packages=['numpy','pandas','pyarrow','scikit-learn','pytest','scipy','joblib','threadpoolctl','narwhals','cloudpickle','python-dateutil','tzdata','iniconfig','packaging','pluggy','pygments','claude-agent-sdk']
+for name in packages:
+ try: print(name,importlib.metadata.version(name),flush=True)
+ except importlib.metadata.PackageNotFoundError: print(name,'NOT INSTALLED',flush=True)
+# A fresh full requirements install is explicitly not claimed.
+env=dict(os.environ,PATH=str(Path(sys.executable).parent)+os.pathsep+os.environ['PATH'])
+for cmd in [['make','all'],[sys.executable,'-m','pytest','tests/','-q'],[sys.executable,'-m','src.experiments'],[sys.executable,'-m','pip','check']]:
+ print('COMMAND:', ' '.join(cmd),flush=True)
+ proc=subprocess.run(cmd,env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+ print(proc.stdout,flush=True); print('EXIT:',proc.returncode,flush=True)
+ assert proc.returncode==0
+for name in ['metrics.json','validation_experiments.json']:
+ actual=json.loads((run/'reports'/name).read_text()); expected=json.loads((source/'reports'/name).read_text())
+ assert actual==expected,(name,actual,expected)
+ print('EXACT DICTIONARY EQUALITY:',name,flush=True)
+import numpy as np,pandas as pd
+from src.ingest import load_raw
+from src.features import build_features,feature_columns,reindex_to_calendar
+from src.train import temporal_split,MODELS
+from src.config import TARGET,FORBIDDEN,RAW_SHA256
+raw=load_raw(); feats=build_features(raw); cols=feature_columns(feats)
+print('Actual model inputs:',json.dumps(cols),flush=True)
+assert len(cols)==15 and not set(cols)&FORBIDDEN
+hits=[]; examined=0
+for r in [1,2,3]:
+ for subset in itertools.combinations(cols,r):
+  X=np.column_stack([feats[list(subset)].to_numpy(dtype=float),np.ones(len(feats))]);y=feats[TARGET].to_numpy(dtype=float)
+  coef,*_=np.linalg.lstsq(X,y,rcond=None);residual=float(np.max(np.abs(X@coef-y))); examined+=1
+  if residual<1e-6:hits.append({'columns':subset,'max_residual':residual})
+assert not hits
+print('Actual-feature exact affine identity check subsets sizes 1-3:',examined,'subsets; hits:',hits,flush=True)
+bydate=raw.set_index('dteday')[TARGET]
+errors={key:0.0 for key in ['cnt_lag_1','cnt_lag_7','cnt_roll_7','cnt_std_7']}
+for row in feats.itertuples():
+ history=np.array([bydate.loc[row.dteday-pd.Timedelta(days=k)] for k in range(1,8)],dtype=float)
+ expected={'cnt_lag_1':history[0],'cnt_lag_7':history[-1],'cnt_roll_7':history.mean(),'cnt_std_7':history.std(ddof=0)}
+ for key,value in expected.items():
+  error=abs(getattr(row,key)-value);errors[key]=max(errors[key],error)
+  assert np.isclose(getattr(row,key),value,rtol=1e-10,atol=1e-7),(row.dteday,key,value,getattr(row,key))
+print('Lag/std alignment checked all',len(feats),'retained rows against raw actual calendar dates; maximum absolute errors:',errors,flush=True)
+for cutoff in ['2011-03-09','2011-03-11','2011-12-31','2012-01-01','2012-02-15','2012-06-30','2012-07-01','2012-12-31']:
+ cut=pd.Timestamp(cutoff); changed=raw.copy(); mask=changed.dteday>=cut;changed.loc[mask,TARGET]=changed.loc[mask,TARGET]*101+123456
+ altered=build_features(changed)
+ pd.testing.assert_frame_equal(feats.loc[feats.dteday<=cut,['dteday']+cols].reset_index(drop=True),altered.loc[altered.dteday<=cut,['dteday']+cols].reset_index(drop=True),check_exact=True)
+print('Future/current-target perturbation: all actual model features on or before each of 8 cutoffs unchanged exactly, including gaps/split boundaries.',flush=True)
+full=pd.date_range(raw.dteday.min(),raw.dteday.max()); missing=full.difference(raw.dteday)
+expected_loss=set(full[:7])
+for date in missing: expected_loss.update(date+pd.Timedelta(days=k) for k in range(1,8))
+actual_loss=set(raw.dteday)-set(feats.dteday)
+assert actual_loss==expected_loss
+print('Raw rows:',len(raw),'calendar rows:',len(full),'missing days:',[str(x.date()) for x in missing],'retained:',len(feats),'exact raw-row losses:',len(actual_loss),flush=True)
+print('Excluded actual dates:',[str(x.date()) for x in sorted(actual_loss)],flush=True)
+train,valid,test=temporal_split(feats)
+for label,part in zip(['train','valid','test'],[train,valid,test]):print('Split',label,len(part),part.dteday.min(),part.dteday.max(),flush=True)
+assert train.dteday.max()<valid.dteday.min() and valid.dteday.max()<test.dteday.min()
+from sklearn.base import clone
+ridge=clone(MODELS['ridge']).fit(train[cols],train[TARGET]);scaler=ridge.named_steps['standardscaler']
+assert scaler.n_samples_seen_==len(train)
+np.testing.assert_allclose(scaler.mean_,train[cols].mean().to_numpy(),rtol=1e-12,atol=1e-12)
+np.testing.assert_allclose(scaler.var_,train[cols].var(ddof=0).to_numpy(),rtol=1e-12,atol=1e-12)
+print('Scaler n_samples_seen_ and means/variances equal training-only rows:',scaler.n_samples_seen_,flush=True)
+mean=clone(MODELS['baseline_mean']).fit(train[cols],train[TARGET]);persistence=clone(MODELS['baseline_persistence']).fit(train[cols],train[TARGET])
+for part in [valid,test]:
+ np.testing.assert_array_equal(mean.predict(part[cols]),np.full(len(part),train[TARGET].mean()))
+ np.testing.assert_array_equal(persistence.predict(part[cols]),part.cnt_lag_1.to_numpy())
+print('Both baselines verified: training-only constant mean; exact prior-calendar-day count persistence.',flush=True)
+metrics=json.loads((run/'reports/metrics.json').read_text());count=0
+for line in (source/'REPORT.md').read_text().splitlines():
+ fields=[x.strip() for x in line.split('|')]
+ if len(fields)!=8 or fields[1] not in ['Before','After']:continue
+ variant,name=fields[1:3]; entry=metrics['before_feature'][name] if variant=='Before' else metrics[name]
+ assert list(map(float,fields[3:7]))==[entry['valid']['r2'],entry['valid']['mae'],entry['test']['r2'],entry['test']['mae']]
+ count+=1
+assert count==8
+print('REPORT Results table numerical consistency: all 8 rows / 32 score cells match reproduced metrics.',flush=True)
+print('Raw SHA-256 verified:',hashlib.sha256((run/'data/raw/bike_daily.csv').read_bytes()).hexdigest(),flush=True)
+print('Original source git status after audit:',subprocess.check_output(['git','status','--short'],cwd=source,text=True),flush=True)
+print('LIMITATIONS: Fresh source reproduction used existing installed pinned numerical/test environment; no fresh network/full requirements installation. claude-agent-sdk absent, no SDK/Claude/Ollama execution. Same-day observed weather is retrospective and report expressly qualifies it; rolling one-day observed-yesterday protocol, not fixed-origin multi-step evaluation. Existing automated contract test accesses test rows; report discloses this. Tests verify current data; bounded drop accounting is enforced by test, not runtime build assertion. No new material finding invalidates qualified conclusions.',flush=True)

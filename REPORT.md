@@ -41,16 +41,16 @@ I would retain persistence as the operational default until the forecast-weather
 
 ## Attribution
 
-The work followed the assignment’s test-first feature, verification, seeded-fault, and validation workflows.
+Assignment-specified configuration: Claude Code (harness), qwen3.5:9b (9B model) via Ollama, with a 64k context window. This describes the expected setup, not a model execution verified by the runs recorded here. The work followed the assignment’s test-first feature, verification, seeded-fault, and validation workflows.
 
 Agent-generated work:
 
 - The agent wrote the volatility feature, new tests, hash guard, validation experiment, before/after metric generation, seed-fault skill, evidence documents, and this draft report.
 - The agent ran the core pipeline, all tests, the three reversible source faults, direct hook invocations, and the Bash-copy bypass in a disposable copy. The agent preserved chronological commits using an external Git directory because workspace policy blocked `.git` creation.
-- The original pipeline, reviewer, hook wiring, new-feature skill, and SDK auditor came from the starter. A fresh independent reviewer audited the teammate repository using the starter checklist; its output and evidence are in `docs/AUDIT.md`. The SDK attempt failed on missing `claude_agent_sdk`; `docs/AUDIT.md` records its actual output. The required `reports/audit.jsonl` is still pending.
+- The original pipeline, reviewer, hook wiring, new-feature skill, and SDK auditor came from the starter. A fresh independent reviewer audited the teammate repository using the starter checklist; its output and evidence are in `docs/AUDIT.md`. A separate fresh reviewer also audited this repository; its structured result is saved in `reports/audit.jsonl` and its evidence in `docs/OWN_AUDIT_EVIDENCE.txt`. Both reviews used independent agents; neither is a claimed Claude Agent SDK batch execution. The historical SDK attempt failed on missing `claude_agent_sdk`, as recorded in `docs/AUDIT.md`.
 
 Human decisions and remaining work:
 
 - After reviewing the report and decision log, the user accepted retaining the volatility feature, the conditional validity of the residual-target transformation, and the recommendation to keep persistence as the deployment default pending forecast-weather validation.
 - Target, forbidden columns, split, and baselines were provided by the assignment/starter. The agent proposed the feature, transformation, and deployment interpretation; the user reviewed and endorsed those conclusions afterward, as recorded in `docs/DECISIONS.md`.
-- The repository is published at https://github.com/aathijmuthu/bikeshare-open. The teammate audit evidence is recorded in `docs/AUDIT.md`; the student’s verdict review and a successful own-repository SDK audit remain pending. After completing and committing that evidence, submit the repository URL through the course form.
+- The repository is published at https://github.com/aathijmuthu/bikeshare-open. The student reviewed and accepted the teammate-audit verdict. Both independent review results are recorded in `docs/AUDIT.md`; the own-repository result is in `reports/audit.jsonl`. Push the completed evidence before submitting the repository URL. The independent agent review substitutes for the requested SDK run; SDK execution and automatic harness hook dispatch remain unverified.
