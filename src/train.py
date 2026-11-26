@@ -16,6 +16,7 @@ reason it fails is the headline result.
 Run: python -m src.train
 """
 import json
+from sklearn.base import clone
 
 import pandas as pd
 from sklearn.base import BaseEstimator, RegressorMixin
@@ -80,6 +81,19 @@ def fit_and_score() -> dict:
             split: {
                 "r2": round(float(r2_score(part[TARGET], model.predict(part[cols]))), 4),
                 "mae": round(float(mean_absolute_error(part[TARGET], model.predict(part[cols]))), 1),
+            }
+            for split, part in [("valid", valid), ("test", test)]
+        }
+    # Matched-row ablation: preserve the four final models at top level;
+    # include the original feature set for the required eight-row table.
+    before_cols = [c for c in cols if c != "cnt_std_7"]
+    results["before_feature"] = {}
+    for name, prototype in MODELS.items():
+        model = clone(prototype).fit(train[before_cols], train[TARGET])
+        results["before_feature"][name] = {
+            split: {
+                "r2": round(float(r2_score(part[TARGET], model.predict(part[before_cols]))), 4),
+                "mae": round(float(mean_absolute_error(part[TARGET], model.predict(part[before_cols]))), 1),
             }
             for split, part in [("valid", valid), ("test", test)]
         }

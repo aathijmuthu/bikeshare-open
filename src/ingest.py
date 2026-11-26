@@ -3,11 +3,12 @@
 Run: python -m src.ingest
 """
 import sys
+import hashlib
 import urllib.request
 
 import pandas as pd
 
-from src.config import DATA_URL, RAW
+from src.config import DATA_URL, RAW, RAW_SHA256
 
 EXPECTED_MIN_ROWS = 700
 REQUIRED_COLS = {"dteday", "cnt", "casual", "registered", "temp", "hum", "windspeed"}
@@ -21,6 +22,9 @@ def download(force: bool = False) -> None:
 
 
 def load_raw() -> pd.DataFrame:
+    digest = hashlib.sha256(RAW.read_bytes()).hexdigest()
+    if digest != RAW_SHA256:
+        raise ValueError(f"raw data SHA-256 mismatch: {digest}; restore the immutable starter CSV")
     df = pd.read_csv(RAW, parse_dates=["dteday"])
     missing = REQUIRED_COLS - set(df.columns)
     if missing:

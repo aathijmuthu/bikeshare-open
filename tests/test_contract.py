@@ -74,3 +74,13 @@ def test_no_raw_target_alias(raw):
         values = raw[column].to_numpy(dtype=float)
         for forbidden in ('cnt', 'casual', 'registered'):
             assert not np.allclose(values, raw[forbidden]), f'{column} aliases {forbidden}'
+
+
+def test_raw_hash_rejects_bash_overwrite(tmp_path, monkeypatch):
+    import src.ingest as ingest
+    from src.config import RAW
+    replacement = tmp_path / 'bike_daily.csv'
+    replacement.write_bytes(RAW.read_bytes() + b'\n')
+    monkeypatch.setattr(ingest, 'RAW', replacement)
+    with pytest.raises(ValueError, match='SHA-256 mismatch'):
+        ingest.load_raw()

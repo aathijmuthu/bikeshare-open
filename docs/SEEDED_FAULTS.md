@@ -407,3 +407,33 @@ python -m pytest tests/ -q
 
 ```
 Repair: one deterministic restoration in this Codex execution, zero Claude turns. Claude hook dispatch remains untested.
+
+## Bash copy bypass (isolated disposable copy)
+
+The actual submission CSV was never modified. To respect its immutability, this experiment ran against a temporary copy of src/, data/raw/, and .claude/. The replacement changes the first count from 1349 to 1350. The same hook payload lacks file_path, so the hook exits without testing. Claude Code permission dispatch was not exercised.
+
+```text
+$ cp /var/folders/gz/6kb8kdpj15v5wds8xxrn24rm0000gn/T/bikeshare-fault-r2lk67v7/replacement.csv /var/folders/gz/6kb8kdpj15v5wds8xxrn24rm0000gn/T/bikeshare-fault-r2lk67v7/data/raw/bike_daily.csv
+exit 0
+stdout: ''
+stderr: ''
+$ bash .claude/hooks/check_leakage.sh < Bash-payload.json
+exit 0
+stdout: ''
+stderr: ''
+$ make data
+python -m src.ingest
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/private/var/folders/gz/6kb8kdpj15v5wds8xxrn24rm0000gn/T/bikeshare-fault-r2lk67v7/src/ingest.py", line 39, in <module>
+    df = load_raw()
+         ^^^^^^^^^^
+  File "/private/var/folders/gz/6kb8kdpj15v5wds8xxrn24rm0000gn/T/bikeshare-fault-r2lk67v7/src/ingest.py", line 27, in load_raw
+    raise ValueError(f"raw data SHA-256 mismatch: {digest}; restore the immutable starter CSV")
+ValueError: raw data SHA-256 mismatch: 0f24d32bc1244c85a4f57a93369ef362ff3833d27456c8f475645cc404272c50; restore the immutable starter CSV
+make: *** [data] Error 1
+exit 2
+```
+
+Implemented protection: load_raw verifies the starter SHA-256 before parsing, so make data and every consumer reject a changed CSV. A PreToolUse Bash policy or filesystem write protection could prevent the copy itself; a PostToolUse Edit/Write hook cannot.
