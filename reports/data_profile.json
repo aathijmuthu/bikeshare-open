@@ -1,0 +1,118 @@
+{
+  "rows": 728,
+  "date_min": "2011-01-03",
+  "date_max": "2012-12-31",
+  "missing_dates": [
+    "2011-03-10"
+  ],
+  "weather_counts": {
+    "GOOD": 463,
+    "MISTY": 245,
+    "BAD": 20
+  },
+  "columns": {
+    "instant": {
+      "dtype": "int64"
+    },
+    "dteday": {
+      "dtype": "datetime64[us]"
+    },
+    "season": {
+      "dtype": "str",
+      "values": [
+        "FALL",
+        "SPRING",
+        "SUMMER",
+        "WINTER"
+      ]
+    },
+    "yr": {
+      "dtype": "int64"
+    },
+    "mnth": {
+      "dtype": "str",
+      "values": [
+        "APR",
+        "AUG",
+        "DEC",
+        "FEB",
+        "JAN",
+        "JUL",
+        "JUN",
+        "MAR",
+        "MAY",
+        "NOV",
+        "OCT",
+        "SEP"
+      ]
+    },
+    "holiday": {
+      "dtype": "str",
+      "values": [
+        "N",
+        "Y"
+      ]
+    },
+    "weekday": {
+      "dtype": "str",
+      "values": [
+        "FRI",
+        "MON",
+        "SAT",
+        "SUN",
+        "THU",
+        "TUE",
+        "WED"
+      ]
+    },
+    "temp": {
+      "dtype": "float64"
+    },
+    "atemp": {
+      "dtype": "float64"
+    },
+    "hum": {
+      "dtype": "float64"
+    },
+    "windspeed": {
+      "dtype": "float64"
+    },
+    "casual": {
+      "dtype": "int64"
+    },
+    "registered": {
+      "dtype": "int64"
+    },
+    "cnt": {
+      "dtype": "int64"
+    },
+    "workday": {
+      "dtype": "str",
+      "values": [
+        "N",
+        "Y"
+      ]
+    },
+    "weather": {
+      "dtype": "str",
+      "values": [
+        "BAD",
+        "GOOD",
+        "MISTY"
+      ]
+    },
+    "days_since_2011": {
+      "dtype": "int64"
+    },
+    "cnt_2d_bfr": {
+      "dtype": "int64"
+    }
+  },
+  "identity_max_residual": 9.094947017729282e-12,
+  "train_max": 6043,
+  "test_above_train_max_fraction": 0.5652173913043478,
+  "year_means": {
+    "2011": 3427.3314917127072,
+    "2012": 5599.934426229508
+  }
+}
