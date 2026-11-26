@@ -64,3 +64,20 @@ def test_no_missing_values(feats):
 def test_dates_are_sorted_and_unique(feats):
     assert feats.dteday.is_monotonic_increasing
     assert feats.dteday.is_unique
+
+
+def test_rolling_std_uses_previous_seven_calendar_days(feats):
+    """Demand volatility on 2012-02-15 uses February 8 through 14 only."""
+    raw = load_raw().set_index('dteday')
+    days = pd.date_range('2012-02-08', '2012-02-14')
+    values = [float(raw.loc[d, TARGET]) for d in days]
+    mean = sum(values) / 7
+    expected = (sum((v - mean) ** 2 for v in values) / 7) ** 0.5
+    actual = feats.set_index('dteday').loc[pd.Timestamp('2012-02-15'), 'cnt_std_7']
+    assert actual == pytest.approx(expected)
+
+
+def test_unknown_weather_is_rejected():
+    from src.features import encode_weather
+    with pytest.raises(ValueError, match='unmapped weather'):
+        encode_weather(pd.Series(['GOOD', 'UNKNOWN']))
